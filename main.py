@@ -29,6 +29,11 @@ client = commands.Bot(
 )
 
 @client.event
+async def on_application_command_error(interaction: nextcord.Interaction, error):
+    await interaction.send(error)
+    raise error
+
+@client.event
 async def on_ready():
     await client.change_presence(
         activity=nextcord.Game(
