@@ -10,8 +10,7 @@ import random
 
 import motor
 import motor.motor_asyncio
-
-cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("mongodb"))
+cluster = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://FlameyosFlow:reZPy4ZKz5YqumS@discord.fm5pk.mongodb.net/discord?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE")
 db = cluster.discord
 collection = db.bank
 company = db.company
@@ -50,7 +49,7 @@ class HackCompanyCommand(commands.Cog):
             if worth < 1500:
                 await interaction.send(f"Not worth it. (company needs $1,500+ required)")
             else:
-                
+                pass
                 
 def setup(client):
     client.add_cog(HackCompanyCommand(client))
