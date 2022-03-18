@@ -39,7 +39,7 @@ class HackCompanyCommand(commands.Cog):
             
         findmembercompany = await collection.find_one({"_id": member.id})
         if not findmembercompany:
-            await interaction.send(f"{member.user} doesn't have a company...")
+            await interaction.send(f"{member.mention} doesn't have a company...")
         else:
             wallet = findbank["wallet"]
             worth = findmembercompany["worth"]
