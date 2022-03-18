@@ -11,7 +11,7 @@ import datetime
 import motor
 import motor.motor_asyncio
 
-cluster = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("mongodb"))
+cluster = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://FlameyosFlow:reZPy4ZKz5YqumS@discord.fm5pk.mongodb.net/discord?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE")
 db = cluster.discord
 collection = db.bank
 
