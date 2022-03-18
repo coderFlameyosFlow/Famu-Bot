@@ -13,7 +13,7 @@ import yarsaw
 import asyncio
 from gtts import gTTS
 
-bot = yarsaw.Client(os.getenv("rsa"), os.getenv("rsidk"))
+bot = yarsaw.Client("ybSHEatbivek", "0fc8104d3bmsh9fcc7b9c2a86b3fp14c1ebjsn3b44d7af5e86")
 
 logging.basicConfig(level=logging.INFO)
 logging.basicConfig(level=logging.WARNING)
@@ -259,5 +259,4 @@ async def change_presence():
         status=nextcord.Status.dnd
     )
 
-keep_alive()
-client.run(os.getenv("TOKEN"))
+client.run("OTAxMDk3NTIzNzAyMjg4Mzg1.YXK6dw.6mf58Yyh4jc5oOHA9ibjIvNwKm0")
