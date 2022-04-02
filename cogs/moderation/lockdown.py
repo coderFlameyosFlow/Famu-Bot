@@ -28,6 +28,7 @@ class LockdownCommands(commands.Cog):
         ),
         channel: GuildChannel = nextcord.SlashOption(
             description="What is the channel? If this is not set then the locked down channel will be this current channel.",
+            channel_types=[ChannelType.text, ChannelType.public_thread, ChannelType.private_thread]
             required=False,
         ),
     ):
@@ -36,16 +37,15 @@ class LockdownCommands(commands.Cog):
             return
         try:
             if setting == "--server":
-                for channel in interaction.guild.channels:
-                    await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=False)
-                    embed = nextcord.Embed(
+                embed = nextcord.Embed(
                     title="Success:",
                     description="Locked down the WHOLE server.",
                     color=nextcord.Color.green()
                 )
                 await interaction.send(embed=embed)
-                return
-              
+                for channel in interaction.guild.channels:
+                    await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=False)
+             return
         except Forbidden:
             embed = nextcord.Embed(
                 title="Error:",
@@ -56,16 +56,17 @@ class LockdownCommands(commands.Cog):
             return
           
         try:
-            if not channel:
-                channel = interaction.message.channel
-            await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {channel.name}", send_messages=False)
-            embed = nextcord.Embed(
-                title="Success:",
-                description="Locked down the channel",
-                color=nextcord.Color.green()
-            )
-            await interaction.send(embed=embed)
-            return
+            if setting == "--channel":
+                if not channel:
+                    channel = interaction.message.channel
+                embed = nextcord.Embed(
+                    title="Success:",
+                    description="Locked down the channel",
+                    color=nextcord.Color.green()
+                )
+                await interaction.send(embed=embed)
+                await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {channel.name}", send_messages=False)
+                return
             
         except nextcord.errors.Forbidden:
             embed = nextcord.Embed(
@@ -100,10 +101,10 @@ class LockdownCommands(commands.Cog):
         try:
             if setting == "--server":
                 for channel in interaction.guild.channels:
-                    await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=False)
+                    await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=True)
                     embed = nextcord.Embed(
                     title="Success:",
-                    description="Locked down the WHOLE server.",
+                    description="Unlocked the WHOLE server.",
                     color=nextcord.Color.green()
                 )
                 await interaction.send(embed=embed)
@@ -121,10 +122,10 @@ class LockdownCommands(commands.Cog):
         try:
             if not channel:
                 channel = interaction.message.channel
-            await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {channel.name}", send_messages=False)
+            await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {channel.name}", send_messages=True)
             embed = nextcord.Embed(
                 title="Success:",
-                description="Locked down the channel",
+                description="Unlocked the channel",
                 color=nextcord.Color.green()
             )
             await interaction.send(embed=embed)
