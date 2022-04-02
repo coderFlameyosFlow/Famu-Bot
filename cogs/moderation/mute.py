@@ -47,7 +47,7 @@ class MuteCommand(commands.Cog):
                         return
     
                     duration = humanfriendly.parse_timespan(time)
-                    await member.edit(timeout=nextcord.utils.utcnow() + datetime.timedelta(seconds=duration), reason=reason)
+                    await member.timeout(timeout=nextcord.utils.utcnow() + datetime.timedelta(seconds=duration), reason=reason)
                     embed = nextcord.Embed(
                         title=f"Muted {member.name}!",
                         description=f"Information about the muted user. ID: {member.id}",
