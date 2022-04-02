@@ -29,7 +29,7 @@ linereader==1.0.0
 MarkupSafe==2.0.1
 motor==2.5.1
 multidict==6.0.2
-nextcord @ https://github.com/nextcord/nextcord/archive/master.zip
+nextcord==2.0.0a10
 nextcord-ext-ipc==2.2.1
 oauthlib==3.2.0
 Panda3D==1.10.11
