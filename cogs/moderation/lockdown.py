@@ -4,7 +4,6 @@ from nextcord import (
     slash_command
 )
 from nextcord.abc import GuildChannel
-from nextcord.errors import Forbidden
 from nextcord.ext import (
   commands,
   application_checks,
@@ -15,6 +14,9 @@ class LockdownCommands(commands.Cog):
         self.client = client
        
     @slash_command(description="Lock a server/channel!")
+    @application_checks.has_guild_permissions(manage_channels=True)
+    @application_checks.bot_has_guild_permissions(manage_channels=True)
+    @application_checks.guild_only()
     async def lock(
         self,
         interaction: Interaction,
@@ -32,53 +34,33 @@ class LockdownCommands(commands.Cog):
             required=False,
         ),
     ):
-        if not (interaction.user.guild_permissions.manage_channels):
-            await interaction.send("You don't have permissions \"Manage Channels\".")
-            return
-        try:
-            if setting == "--server":
-                embed = nextcord.Embed(
-                    title="Success:",
-                    description="Locked down the WHOLE server.",
-                    color=nextcord.Color.green()
-                )
-                await interaction.send(embed=embed)
-                for channel in interaction.guild.channels:
-                    await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=False)
+        if setting == "--server":
+            embed = nextcord.Embed(
+                title="Success:",
+                description="Locked down the WHOLE server.",
+                color=nextcord.Color.green()
+            )
+            await interaction.send(embed=embed)
+            for channel in interaction.guild.channels:
+                await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=False)
              return
-        except Forbidden:
+
+        elif setting == "--channel":
+            if not channel:
+                channel = interaction.message.channel
             embed = nextcord.Embed(
-                title="Error:",
-                description="I didn't have enough permissions, could be because: ``` 1: This was performed in a direct message \n2: I didn't have the permission Manage Nicknames \n```",
-                color=nextcord.Color.red()
+                title="Success:",
+                description="Locked down the channel",
+                color=nextcord.Color.green()
             )
             await interaction.send(embed=embed)
+            await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {channel.name}", send_messages=False)
             return
-          
-        try:
-            if setting == "--channel":
-                if not channel:
-                    channel = interaction.message.channel
-                embed = nextcord.Embed(
-                    title="Success:",
-                    description="Locked down the channel",
-                    color=nextcord.Color.green()
-                )
-                await interaction.send(embed=embed)
-                await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {channel.name}", send_messages=False)
-                return
-            
-        except nextcord.errors.Forbidden:
-            embed = nextcord.Embed(
-                title="Error:",
-                description="I didn't have enough permissions, could be because: ``` 1: This was performed in a direct message \n2: I didn't have the permission Manage Nicknames \n```",
-                color=nextcord.Color.red()
-            )
-            await interaction.send(embed=embed)
-            return
-        return
       
     @slash_command(description="Unlock a server/channel!")
+    @application_checks.has_guild_permissions(manage_channels=True)
+    @application_checks.bot_has_guild_permissions(manage_channels=True)
+    @application_checks.guild_only()
     async def unlock(
         self,
         interaction: Interaction,
@@ -95,31 +77,18 @@ class LockdownCommands(commands.Cog):
             required=False,
         ),
     ):
-        if not (interaction.user.guild_permissions.manage_channels):
-            await interaction.send("You don't have permissions \"Manage Channels\".")
-            return
-        try:
-            if setting == "--server":
-                for channel in interaction.guild.channels:
-                    await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=True)
-                    embed = nextcord.Embed(
-                    title="Success:",
-                    description="Unlocked the WHOLE server.",
-                    color=nextcord.Color.green()
-                )
-                await interaction.send(embed=embed)
-                return
-              
-        except Forbidden:
-            embed = nextcord.Embed(
-                title="Error:",
-                description="I didn't have enough permissions, could be because: ``` 1: This was performed in a direct message \n2: I didn't have the permission Manage Nicknames \n```",
-                color=nextcord.Color.red()
+        if setting == "--server":
+            for channel in interaction.guild.channels:
+                await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=True)
+                embed = nextcord.Embed(
+                title="Success:",
+                description="Unlocked the WHOLE server.",
+                color=nextcord.Color.green()
             )
             await interaction.send(embed=embed)
             return
           
-        try:
+        elif setting == "--channel":
             if not channel:
                 channel = interaction.message.channel
             await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {channel.name}", send_messages=True)
@@ -130,16 +99,21 @@ class LockdownCommands(commands.Cog):
             )
             await interaction.send(embed=embed)
             return
-            
-        except nextcord.errors.Forbidden:
-            embed = nextcord.Embed(
-                title="Error:",
-                description="I didn't have enough permissions, could be because: ``` 1: This was performed in a direct message \n2: I didn't have the permission Manage Nicknames \n```",
-                color=nextcord.Color.red()
-            )
-            await interaction.send(embed=embed)
-            return
         return
+    
+    @lock.error
+    async def lock_error(interaction: Interaction, error):
+        if isinstance(error, application_checks.MissingGuildPermissions):
+            await interaction.send("You don't have enough permissions to manage channels.")
+        if isinstance(error, application_checks.BotMissingGuildPermissions):
+            await interaction.send("I don't have enough permissions to manage channels, please contact the owner of the server if this is a mistake.")
+            
+    @unlock.error
+    async def unlock_error(interaction: Interaction, error):
+        if isinstance(error, application_checks.MissingGuildPermissions):
+            await interaction.send("You don't have enough permissions to manage channels.")
+        if isinstance(error, application_checks.BotMissingGuildPermissions):
+            await interaction.send("I don't have enough permissions to manage channels, please contact the owner of the server if this is a mistake.")
         
 def setup(client):
     client.add_cog(LockdownCommands(client))
