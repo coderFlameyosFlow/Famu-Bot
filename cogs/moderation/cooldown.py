@@ -29,7 +29,7 @@ class SlowdownCommand(commands.Cog):
         ), 
         channel: GuildChannel = nextcord.SlashOption(
             description="Where should the slowdown be? if not set, the slowmode will be in this channel.",
-            channel_types=[ChannelType.text, ChannelType.public_thread, ChannelType.private_thread]
+            channel_types=[ChannelType.text, ChannelType.public_thread, ChannelType.private_thread],
             required=False
         ), 
     ):
