@@ -7,6 +7,7 @@ from nextcord import (
 from nextcord.abc import GuildChannel
 from nextcord.ext import commands
 from nextcord.errors import Forbidden
+from nextcord.ext import application_checks
 
 import datetime
 import humanfriendly
@@ -16,6 +17,8 @@ class SlowdownCommand(commands.Cog):
         self.client = client
 
     @slash_command(description="Slowdown a channel with this command!")
+    @application_checks.has_permissions(manage_channels=True)
+    @application_checks.bot_has_permissions(manage_channels=True)
     async def slowmode(
         self,
         interaction: Interaction, 
@@ -30,30 +33,27 @@ class SlowdownCommand(commands.Cog):
             required=False
         ), 
     ):
-        if not (interaction.user.guild_permissions.manage_channels):
-            await inter.send("You need `Manage Channels` permissions")
-            return
+      time = humanfriendly.parse_timespan(duration)
+      if not channel:
+          channel = interaction.channel
+        
+      if time = None:
+           time = 0
 
-          try:
-              time = humanfriendly.parse_timespan(duration)
-              if not channel:
-                  channel = interaction.channel
+      if time => 21600:
+          await interaction.send("You can't exceed 21600 seconds/6 hours of slowmode - Discord")
+          return
 
-              if time > 21600:
-                  await interaction.send("You can't exceed 21600 seconds/6 hours of slowmode. \n(maximum the discord API could handle)")
-                  return
-
-              await channel.edit(slowmode_delay=time, reason=f"{interaction.user} used slowmode on {channel.name}")
-               await interaction.send(f"You slowmoded ({channel.name}) successfully!")
-
-          except Forbidden:
-              embed = nextcord.Embed(
-                  title="Error:",
-                  description="I didn't have enough permissions, could be because: ``` 1: I didn't have the permission Manage Channels or Manage Messages \n2: Some stuff failed (please join the support server) \n```",
-                  color=nextcord.Color.red()
-              )
-              await interaction.send(embed=embed)
-              return
+      await channel.edit(slowmode_delay=time, reason=f"{interaction.user} used slowmode on {channel.name}")
+       await interaction.send(f"You slowmoded ({channel.name}) successfully!")
+    
+    @slowmode.error
+    async def slowmode_error(interaction: Interaction, error):
+        if isinstance(error, application_checks.MissingPermissions):
+            await interaction.send("You're missing manage channels permissions!")
+            
+        if isinstance(error, application_checks.BotMissingPermissions):
+            await interaction.send("I'm missing manage channels permissions, please contact the owner of the server about this if this is a mistake!")
 
 def setup(client):
     client.add_cog(SlowdownCommand(client))
