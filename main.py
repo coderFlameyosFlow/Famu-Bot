@@ -39,7 +39,7 @@ async def on_application_command_error(interaction: nextcord.Interaction, error)
             title="You're being cooldowned!",
             description=f"Try again in {error.retry_after}.",
             color=nextcord.Color.red(),
-            datetime=datetime.datetime.now()
+            timestamp=datetime.datetime.now()
         )
         await interaction.send(embed=embed)
 
