@@ -12,6 +12,8 @@ import os
 import motor
 import motor.motor_asyncio
 
+import cooldowns
+
 cluster = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://FlameyosFlow:reZPy4ZKz5YqumS@discord.fm5pk.mongodb.net/discord?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE")
 db = cluster.discord
 collection = db.bank
@@ -22,6 +24,7 @@ class WorkCommand(commands.Cog):
         self.client = client
 
     @slash_command(name="work", description="Work and get Money!")
+    @cooldowns.cooldown(1, 90, bucket=cooldowns.SlashBucket.author)
     async def work(self, interaction: Interaction):
         await interaction.response.defer()
         async with interaction.channel.typing():
@@ -49,20 +52,15 @@ class WorkCommand(commands.Cog):
                 worth = random.randrange(float(350))
                 earnings = random.randrange(5000, 25001)
 
-            loss = random.randint(1000, 5000)
             a = random.randint(1, 101)
 
-            if a > 75:
+            if a => 85:
                 embed = nextcord.Embed(
                     title="oh shi-",
-                    description=f"You got absolutely nothing from working, actually you owe us ${loss:,}.",
+                    description=f"Suddenly you had 12 hours to make a huge project, you stayed up overnight and ran late with no coffee, you accidentally dropped your huge project and poured your cup of coffee on it.",
                     color=nextcord.Color.random(),
                     timestamp=datetime.datetime.utcnow()
                 )
-
-                await interaction.followup.send(embed=embed)
-                updated_coins = wallet - loss
-                await collection.update_one({"_id": user.id}, {"$set": {"wallet": updated_coins}})
 
             else:
                 embed2 = nextcord.Embed(
