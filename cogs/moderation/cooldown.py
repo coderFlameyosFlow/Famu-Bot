@@ -37,7 +37,7 @@ class SlowdownCommand(commands.Cog):
       if not channel:
           channel = interaction.channel
 
-      if time => 21600:
+      if time >= 21600:
           await interaction.send("You can't exceed 21600 seconds/6 hours of slowmode - Discord")
           return
 
