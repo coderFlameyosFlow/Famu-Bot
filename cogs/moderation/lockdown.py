@@ -1,7 +1,8 @@
 import nextcord
 from nextcord import (
     Interaction,
-    slash_command
+    slash_command,
+    ChannelType,
 )
 from nextcord.abc import GuildChannel
 from nextcord.ext import (
