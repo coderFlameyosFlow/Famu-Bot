@@ -33,6 +33,7 @@ nextcord==2.1.0
 nextcord-ext-ipc==2.2.1
 oauthlib==3.2.0
 Panda3D==1.10.11
+typing-extensions==4.3.0
 panda3d-gltf==0.13
 panda3d-simplepbr==0.9
 priority==2.0.0
