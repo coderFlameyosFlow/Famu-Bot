@@ -30,7 +30,7 @@ client = commands.Bot(
     owner_id=852485677777682432
 )
 
-@bot.event
+@client.event
 async def on_application_command_error(interaction: nextcord.Interaction, error):
     error = getattr(error, "original", error)
 
