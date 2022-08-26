@@ -30,7 +30,7 @@ class LockdownCommands(commands.Cog):
         ),
         channel: GuildChannel = nextcord.SlashOption(
             description="What is the channel? If this is not set then the locked down channel will be this current channel.",
-            channel_types=[ChannelType.text, ChannelType.public_thread, ChannelType.private_thread]
+            channel_types=[ChannelType.text, ChannelType.public_thread, ChannelType.private_thread],
             required=False,
         ),
     ):
