@@ -43,7 +43,7 @@ class LockdownCommands(commands.Cog):
             await interaction.send(embed=embed)
             for channel in interaction.guild.channels:
                 await channel.set_permissions(interaction.guild.default_role, reason=f"{interaction.user} locked {interaction.guild.name}", send_messages=False)
-             return
+            return
 
         elif setting == "--channel":
             if not channel:
