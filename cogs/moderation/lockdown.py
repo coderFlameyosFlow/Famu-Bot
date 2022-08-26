@@ -69,7 +69,7 @@ class LockdownCommands(commands.Cog):
             choices=[
                 "--server",
                 "--channel",
-            ]
+            ],
             required=True,
         ),
         channel: GuildChannel = nextcord.SlashOption(
