@@ -54,7 +54,7 @@ class WorkCommand(commands.Cog):
 
             a = random.randint(1, 101)
 
-            if a => 85:
+            if a >= 85:
                 embed = nextcord.Embed(
                     title="oh shi-",
                     description=f"Suddenly you had 12 hours to make a huge project, you stayed up overnight and ran late with no coffee, you accidentally dropped your huge project and poured your cup of coffee on it.",
