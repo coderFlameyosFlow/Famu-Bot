@@ -6,10 +6,14 @@ from nextcord.ext import (
 
 import os
 import logging
+import datetime
 
 import yarsaw
 import asyncio
 from gtts import gTTS
+
+import cooldowns
+from cooldowns import CallableOnCooldown
 
 bot = yarsaw.Client("ybSHEatbivek", "0fc8104d3bmsh9fcc7b9c2a86b3fp14c1ebjsn3b44d7af5e86")
 
@@ -26,6 +30,22 @@ client = commands.Bot(
     owner_id=852485677777682432
 )
 
+@bot.event
+async def on_application_command_error(interaction: nextcord.Interaction, error):
+    error = getattr(error, "original", error)
+
+    if isinstance(error, CallableOnCooldown):
+        embed = nextcord.Embed(
+            title="You're being cooldowned!",
+            description=f"Try again in {error.retry_after}.",
+            color=nextcord.Color.red(),
+            datetime=datetime.datetime.now()
+        )
+        await interaction.send(embed=embed)
+
+    else:
+        raise error
+        
 @client.event
 async def on_ready():
     await client.wait_until_ready()
