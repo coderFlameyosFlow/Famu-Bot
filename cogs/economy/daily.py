@@ -11,6 +11,8 @@ import datetime
 import motor
 import motor.motor_asyncio
 
+import cooldowns
+
 cluster = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://FlameyosFlow:reZPy4ZKz5YqumS@discord.fm5pk.mongodb.net/discord?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE")
 db = cluster.discord
 collection = db.bank
@@ -20,6 +22,7 @@ class DailyCommand(commands.Cog):
         self.client = client
 
     @slash_command(name="daily", description="Get daily money!")
+    @cooldowns.cooldown(1, 86400, bucket=cooldowns.SlashBucket.author)
     async def daily(self, interaction: Interaction):
         async with interaction.channel.typing():
             member = interaction.user
