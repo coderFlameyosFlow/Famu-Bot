@@ -42,7 +42,7 @@ class SlowdownCommand(commands.Cog):
           return
 
       await channel.edit(slowmode_delay=time, reason=f"{interaction.user} used slowmode on {channel.name}")
-       await interaction.send(f"You slowmoded ({channel.name}) successfully!")
+      await interaction.send(f"You slowmoded ({channel.name}) successfully!")
     
     @slowmode.error
     async def slowmode_error(interaction: Interaction, error):
