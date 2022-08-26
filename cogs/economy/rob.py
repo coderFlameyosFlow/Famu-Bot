@@ -12,6 +12,8 @@ import os
 import motor
 import motor.motor_asyncio
 
+import cooldowns
+
 cluster = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://FlameyosFlow:reZPy4ZKz5YqumS@discord.fm5pk.mongodb.net/discord?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE")
 db = cluster.discord
 collection = db.bank
@@ -24,6 +26,7 @@ class RobCommand(commands.Cog):
         name="rob", 
         description="Rob some innocent people!"
     )
+    @cooldowns.cooldown(1, 300, bucket=cooldowns.SlashBucket.author)
     async def rob(
         self,
         interaction: Interaction, 
@@ -74,11 +77,11 @@ class RobCommand(commands.Cog):
                 pass
 
             else:
-                chance = [False, True, True, False, False, True, False, False, True, False, True, True]
+                chance = [False, True, True, False, False, True, False, False, True, False, True, True, False, False, True]
 
                 chances = random.choice(chance)
                 earnings = random.randrange(int(0.65*int(mwallet)))
-                loss = random.randrange(int(0.35*int(wallet)))
+                loss = random.randrange(int(0.31834*int(wallet)))
 
                 if chances == True:
                     earningsa = wallet + earnings
