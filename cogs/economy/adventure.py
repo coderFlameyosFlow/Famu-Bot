@@ -12,6 +12,8 @@ import os
 import motor
 import motor.motor_asyncio
 
+import cooldowns
+
 cluster = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://FlameyosFlow:reZPy4ZKz5YqumS@discord.fm5pk.mongodb.net/discord?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE")
 db = cluster.discord
 crates = db.crates
@@ -21,6 +23,7 @@ class AdventureCrateCommands(commands.Cog):
         self.client = client
 
     @slash_command(name="adventure", description="Stop it, Go Travel.")
+    @cooldowns.cooldown(1, 100, bucket=cooldowns.SlashBucket.author)
     async def adventure(
         self,
         interaction: Interaction, 
