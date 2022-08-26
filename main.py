@@ -37,7 +37,7 @@ async def on_application_command_error(interaction: nextcord.Interaction, error)
     if isinstance(error, CallableOnCooldown):
         embed = nextcord.Embed(
             title="You're being cooldowned!",
-            description=f"Try again in {error.retry_after}.",
+            description=f"Try issuing this command again in {error.retry_after} seconds!",
             color=nextcord.Color.red(),
             timestamp=datetime.datetime.now()
         )
