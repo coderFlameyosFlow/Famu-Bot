@@ -20,10 +20,12 @@ class HackCompanyCommand(commands.Cog):
         self.client = client
 
     @slash_command(name="hack", description="hi")
+    @cooldowns.cooldown(1, 350, bucket=cooldowns.SlashBucket.author)
     async def huck(self, interaction: Interaction):
         pass
 
     @huck.subcommand(name="company", description="Hack someone's company!")
+    @cooldowns.cooldown(1, 350, bucket=cooldowns.SlashBucket.author)
     async def coompany(
         self, 
         interaction: Interaction,
