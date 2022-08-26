@@ -12,6 +12,7 @@ class HackCommand(commands.Cog):
         self.client = client
 
     @slash_command(name="heck", description="Hack someone TOTALLY NOT FAKE DON'T TAKE SERIOUSLY...")
+    @cooldowns.cooldown(1, 240, bucket=cooldowns.SlashBucket.guild)
     async def hack(
         self,
         interaction: Interaction,
@@ -20,7 +21,6 @@ class HackCommand(commands.Cog):
             required=True
         )
     ):
-        """
         passwords = [
             ";)k*Hq<RwzxT2Cd>",
             "Fk6+j;x&dgUB<3SH",
@@ -1425,10 +1425,8 @@ class HackCommand(commands.Cog):
             await asyncio.sleep(1)
             await msg.edit("[100%] Finished Hacking {0.mention}...".format(member))
             await asyncio.sleep(1)
-            await msg.edit("[100%] Please DO NOT take this seriously, this is ***absolutely fake***, only used for ~~hacking~~ joking around ;)")
+            await msg.edit("[100%] Please DO NOT take this seriously, this is ***absolutely fake***, only used for ~~hacking~~ fun ;)")
         return
-        """
-        await interaction.send("This command is temporarily disabled due to people spamming it to lag the bot.")
 
 def setup(client):
     client.add_cog(HackCommand(client))
