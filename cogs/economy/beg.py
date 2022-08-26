@@ -12,6 +12,8 @@ import os
 import motor
 import motor.motor_asyncio
 
+import cooldowns
+
 cluster = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://FlameyosFlow:reZPy4ZKz5YqumS@discord.fm5pk.mongodb.net/discord?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE")
 db = cluster.discord
 collection = db.bank
@@ -40,6 +42,7 @@ class BegCommand(commands.Cog):
         self.client = client
 
     @slash_command(name="beg", description="Beg off the streets!")
+    @cooldowns.cooldown(1, 25, bucket=cooldowns.SlashBucket.author)
     async def beg(self, interaction: Interaction):
         member = interaction.user
         findbank = await collection.find_one({"_id": member.id})
