@@ -7,6 +7,8 @@ from nextcord import (
 import random
 import asyncio
 
+import cooldowns
+
 class HackCommand(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
