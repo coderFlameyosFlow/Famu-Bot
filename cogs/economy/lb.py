@@ -45,6 +45,7 @@ class LeaderboardCommand(commands.Cog):
             if id_ is not None:
                 try:
                     member = await interaction.guild.fetch_member(id_)
+                    member = member.name + "#" + member.discriminator
                 except NotFound:
                     pass
                 except Forbidden:
