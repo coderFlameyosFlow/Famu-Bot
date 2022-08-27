@@ -46,7 +46,7 @@ class LeaderboardCommand(commands.Cog):
                 try:
                     member = await interaction.guild.fetch_member(id_)
                 except (Forbidden or NotFound):
-                    pass
+                    continue
                 name = member.name
                 em.add_field(name=f"{index}. {name}", value=f"{amt}", inline=False)
                 if index == x:
