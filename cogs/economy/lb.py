@@ -41,7 +41,6 @@ class LeaderboardCommand(commands.Cog):
         )
         index = 1
         for amt in total:
-        await interaction.send(embed=em)
             id_ = leader_board[amt]
             if id_ is not None:
                 try:
