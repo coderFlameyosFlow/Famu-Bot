@@ -47,7 +47,7 @@ class BegCommand(commands.Cog):
         member = interaction.user
         findbank = await collection.find_one({"_id": member.id})
         if not findbank:
-            await collection.insert_one({"_id": member.id, "wallet": 0})
+            await collection.insert_one({"_id": member.id, "wallet": 0, "bank": 0})
 
         wallet = findbank["wallet"]
 
