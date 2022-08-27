@@ -20,12 +20,17 @@ class LeaderboardCommand(commands.Cog):
 
     @slash_command(name="lb", description="Leaderboard of people, ranked by money!")
     async def lb(self, interaction: Interaction):
-        x: int = 10 
+        x: int = 10
         cursor = collection.find().sort([('_id', 1)])
         docs = await cursor.to_list(length=x)
         leader_board = {}
         total = []
         for entry in docs:
+            if entry["bank"] is not None:
+                if entry["bank"] > 0:
+                    bank = entry["bank"]
+            else:
+                bank = 0
             total_amount = entry["wallet"] + entry["bank"]
             name = int(entry["_id"])
             leader_board[total_amount] = name
