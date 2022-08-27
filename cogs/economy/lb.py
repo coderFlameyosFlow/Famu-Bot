@@ -41,15 +41,17 @@ class LeaderboardCommand(commands.Cog):
         )
         index = 1
         for amt in total:
+        await interaction.send(embed=em)
             id_ = leader_board[amt]
             if id_ is not None:
                 try:
                     member = await interaction.guild.fetch_member(id_)
-                    member = member.name + "#" + member.discriminator
                 except NotFound:
                     pass
                 except Forbidden:
                     pass
+                
+                name = member.name + "#" + member.discriminator
                 
                 em.add_field(name=f"{index}. {name}", value=f"{amt}", inline=False)
                 
@@ -57,7 +59,7 @@ class LeaderboardCommand(commands.Cog):
                     break
                 else:
                     index += 1
-                await interaction.send(embed=em)
+        await interaction.send(embed=em)
 
 def setup(client):
     client.add_cog(LeaderboardCommand(client))
