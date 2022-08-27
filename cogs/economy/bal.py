@@ -29,23 +29,22 @@ class BalanceCommand(commands.Cog):
         )
     ):
         await interaction.response.defer()
-        async with interaction.channel.typing():
-            member = member or interaction.user
-                    
-            findbank = await collection.find_one({"_id": member.id})
-            if not findbank:
-                await collection.insert_one({"_id": member.id, "wallet": 0})
+        member = member or interaction.user
 
-            wallet = findbank["wallet"]
+        findbank = await collection.find_one({"_id": member.id})
+        if not findbank:
+            await collection.insert_one({"_id": member.id, "wallet": 0})
 
-            em = nextcord.Embed(
-                description="__**Wallet Balance**__: \n{:,}".format(wallet),
-                color=member.color
-            ).set_author(
-                name=str(interaction.user), 
-                icon_url=interaction.user.avatar.url
-            )
-            await interaction.followup.send(embed=em)
+        wallet = findbank["wallet"]
+
+        em = nextcord.Embed(
+            description="__**Wallet Balance**__: \n{:,}".format(wallet),
+            color=member.color
+        ).set_author(
+            name=str(member.name + "#" + member.discriminator), 
+            icon_url=member.avatar.url
+        )
+        await interaction.followup.send(embed=em)
 
 def setup(client):
     client.add_cog(BalanceCommand(client))
