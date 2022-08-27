@@ -26,7 +26,7 @@ class LeaderboardCommand(commands.Cog):
         leader_board = {}
         total = []
         for entry in docs:
-            total_amount = entry["wallet"]
+            total_amount = entry["wallet"] + entry["bank"]
             name = int(entry["_id"])
             leader_board[total_amount] = name
             total.append(total_amount)
@@ -45,10 +45,13 @@ class LeaderboardCommand(commands.Cog):
             if id_ is not None:
                 try:
                     member = await interaction.guild.fetch_member(id_)
-                except (Forbidden or NotFound):
-                    continue
-                name = member.name
+                except NotFound:
+                    pass
+                except Forbidden:
+                    pass
+                
                 em.add_field(name=f"{index}. {name}", value=f"{amt}", inline=False)
+                
                 if index == x:
                     break
                 else:
