@@ -26,12 +26,7 @@ class LeaderboardCommand(commands.Cog):
         leader_board = {}
         total = []
         for entry in docs:
-            if entry["bank"] is not None:
-                if entry["bank"] > 0:
-                    bank = entry["bank"]
-            else:
-                bank = 0
-            total_amount = entry["wallet"] + entry["bank"]
+            total_amount = entry["wallet"]
             name = int(entry["_id"])
             leader_board[total_amount] = name
             total.append(total_amount)
