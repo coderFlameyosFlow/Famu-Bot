@@ -8,14 +8,10 @@ import os
 import logging
 import datetime
 
-import yarsaw
 import asyncio
-from gtts import gTTS
 
 import cooldowns
 from cooldowns import CallableOnCooldown
-
-bot = yarsaw.Client("ybSHEatbivek", "0fc8104d3bmsh9fcc7b9c2a86b3fp14c1ebjsn3b44d7af5e86")
 
 logging.basicConfig(level=logging.INFO)
 logging.basicConfig(level=logging.WARNING)
@@ -60,47 +56,6 @@ async def on_connect():
     client.add_all_application_commands() 
     await client.sync_application_commands()
     print("Connecting to discord...")
-
-@client.slash_command(description="Talk with the bot!")
-async def talk(interaction):
-        talking = True
-        await interaction.send("You are now talking to me, to leave this, say goodbye famurai")
-        while talking:
-            try:
-                def check(m):
-                    return m.author == interaction.user and m.channel == interaction.channel
-                raw_msg = await client.wait_for("message", check=check, timeout=60.0)
-                msg = raw_msg.content
-            except asyncio.TimeoutError:
-                talking = False
-                await interaction.send("You timed out, issue the command again")
-
-            if msg == "goodbye famurai":
-                talking = False
-                await interaction.send("Goodbye {0.user}, I had a great time talking to you!".format(interaction))
-            else:
-                raw_response = await bot.get_ai_response(
-                    msg, 
-                    bot_name="Famu but people call me Famurai", 
-                    bot_master="FlameyosFlow", 
-                    bot_location="Egypt", 
-                    bot_favorite_color="Black", 
-                    bot_birth_place="Qatar", 
-                    bot_company="Famurai inc.",
-                    bot_build='Public',
-                    bot_email='I have no email.',
-                    bot_age='2',
-                    bot_birth_date='18th December, 2021',
-                    bot_birth_year='2021',
-                    bot_favorite_book='Harry Potter',
-                    bot_favorite_band='Imagine Dragons',
-                    bot_favorite_artist='Eminem',
-                    bot_favorite_actress='Selena Gomez',
-                    bot_favorite_actor='Tom Holland',
-                )
-                response = raw_response.AIResponse
-
-                await interaction.send(str(response))
 
 for folder in os.listdir("./cogs"):
     for filename in os.listdir(f"./cogs/{folder}"):
