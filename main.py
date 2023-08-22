@@ -75,4 +75,4 @@ async def change_presence():
         status=nextcord.Status.dnd
     )
 
-client.run("OTAxMDk3NTIzNzAyMjg4Mzg1.YXK6dw.6mf58Yyh4jc5oOHA9ibjIvNwKm0")
+client.run("...")
